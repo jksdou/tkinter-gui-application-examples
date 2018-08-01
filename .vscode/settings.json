@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.6/bin/python3",
+    "python.pythonPath": "python3",
     "python.formatting.provider": "black"
 }
