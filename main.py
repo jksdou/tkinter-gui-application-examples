@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+import tkinter as gui
 
-import tkinter as tk
-from LoginPage import *
-# import MainPage as MainPage
+from login import Login
 
-root = tk.Tk()
+root = gui.Tk()
 
-root.title('主程序')
-
-# MainPage.MainPage(root)
-LoginPage(root)
+Login(root)
 
 root.mainloop()
