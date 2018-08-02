@@ -28,17 +28,17 @@ class initMenu:
         filemenu.add_separator()
         filemenu.add_command(label="退出", command=self.root.quit)
 
-        # 编辑下拉菜单
-        editmenu = gui.Menu(self.menubar, tearoff=0)
-        editmenu.add_command(label="剪切", command=self.edit_cut)
-        editmenu.add_command(label="复制", command=self.edit_copy)
-        editmenu.add_command(label="粘贴", command=self.edit_paste)
+        # 用户下拉菜单
+        usermenu = gui.Menu(self.menubar, tearoff=0)
+        usermenu.add_command(label="用户列表", command=self.page.openUserList)
+        usermenu.add_command(label="用户添加", command=self.page.openUserAdd)
+        usermenu.add_command(label="用户详情窗口", command=self.page.openUser)
 
-        # 查看下拉菜单
-        viewmenu = gui.Menu(self.menubar, tearoff=0)
-        viewmenu.add_command(label="数据录入", command=self.page.inputData)
-        viewmenu.add_command(label="查询", command=self.page.queryData)
-        viewmenu.add_command(label="统计", command=self.page.countData)
+        # 文章下拉菜单
+        articlemenu = gui.Menu(self.menubar, tearoff=0)
+        articlemenu.add_command(label="文章查询", command=self.page.queryData)
+        articlemenu.add_command(label="文章添加", command=self.page.inputData)
+        articlemenu.add_command(label="文章统计", command=self.page.countData)
 
         # 数据下拉菜单
         datamenu = gui.Menu(self.menubar, tearoff=0)
@@ -59,8 +59,8 @@ class initMenu:
 
         # 将下拉菜单加到菜单栏
         self.menubar.add_cascade(label="文件", menu=filemenu)
-        self.menubar.add_cascade(label="编辑", menu=editmenu)
-        self.menubar.add_cascade(label="查看", menu=viewmenu)
+        self.menubar.add_cascade(label="用户", menu=usermenu)
+        self.menubar.add_cascade(label="文章", menu=articlemenu)
         self.menubar.add_cascade(label="数据", menu=datamenu)
         self.menubar.add_cascade(label="帮助", menu=helpmenu)
 

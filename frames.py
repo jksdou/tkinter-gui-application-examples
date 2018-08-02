@@ -7,7 +7,19 @@ from tkinter.messagebox import *
 from common import set_window_center
 
 
-class InputFrame(Frame):  # 继承Frame类
+class HomeFrame(Frame):  # 继承Frame类
+    """应用主界面"""
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.root = master  # 定义内部变量root
+        self.initPage()
+
+    def initPage(self):
+        Label(self, text="用户:").grid(row=1, stick=W, pady=10)
+        Button(self, text="查看").grid(row=6, column=1, stick=E, pady=10)
+
+
+class InputFrame(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.root = master  # 定义内部变量root
@@ -52,13 +64,42 @@ class CountFrame(Frame):
 
 
 class AboutFrame(Frame):
+    """关于界面"""
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.root = master
-        master.title("联系我们")
         self.initPage()
 
     def initPage(self):
         # Label(self, text="关于界面").pack()
+        Label(self, text="你好你好你好你好").pack(expand=YES, fill=BOTH)
+        Label(self, text="类似于弹出窗口，具有独立的窗口属性。", width=150).pack()
+
+
+class UserListFrame(Frame):
+    """用户列表界面"""
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.root = master
+        self.initPage()
+
+    def initPage(self):
+        Label(self, text="用户列表页面内容").pack()
+        Label(self, text="你好你好你好你好").pack(expand=YES, fill=BOTH)
+        Label(self, text="类似于弹出窗口，具有独立的窗口属性。", width=150).pack()
+
+
+class UserAddFrame(Frame):
+    """用户添加"""
+
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.root = master
+        self.initPage()
+
+    def initPage(self):
+        Label(self, text="用户添加页面内容").pack()
         Label(self, text="你好你好你好你好").pack(expand=YES, fill=BOTH)
         Label(self, text="类似于弹出窗口，具有独立的窗口属性。", width=150).pack()

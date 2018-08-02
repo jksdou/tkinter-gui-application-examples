@@ -8,6 +8,14 @@ def set_window_center(window, w, h):
     ws = window.winfo_screenwidth()
     hs = window.winfo_screenheight()
     # 计算 x, y 位置
-    x = (ws / 2) - (w / 2)
-    y = (hs / 2) - (h / 2)
+    x = (ws - w) / 2
+    y = (hs - h) / 2 - 50
     window.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+
+def get_screen_size(window):
+    return window.winfo_screenwidth(), window.winfo_screenheight()
+
+
+def get_window_size(window):
+    return window.winfo_reqwidth(), window.winfo_reqheight()
