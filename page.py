@@ -39,6 +39,7 @@ class MainPage(object):
             self.currentPage.pack_forget()
         if hasattr(self, pageName):
             self.currentPage = getattr(self, pageName)
+            self.currentPage.initPage()
             self.currentPage.pack()
         else:
             print("错误")

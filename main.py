@@ -6,7 +6,7 @@ import tkinter as gui
 from login import Login
 
 root = gui.Tk()
-root.resizable(False, False)
+# root.resizable(False, False)
 
 Login(root)
 

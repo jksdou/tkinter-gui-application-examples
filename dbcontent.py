@@ -31,5 +31,5 @@ def user_add(username, password):
 def user_list():
     """用户列表"""
     db = DBHelper()
-    list = db.get_all_user_info()
-    return list
+    return db.get_all_user_info()
+

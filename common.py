@@ -11,6 +11,7 @@ def set_window_center(window, w, h):
     x = (ws - w) / 2
     y = (hs - h) / 2 - 50
     window.geometry("%dx%d+%d+%d" % (w, h, x, y))
+    window.minsize(w, h)
 
 
 def get_screen_size(window):

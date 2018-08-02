@@ -7,8 +7,10 @@ import tkinter.messagebox
 import dbcontent
 from common import set_window_center
 
+
 class HomeFrame(Frame):  # 继承Frame类
     """应用主界面"""
+
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.root = master  # 定义内部变量root
@@ -83,13 +85,57 @@ class UserListFrame(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.root = master
-        self.initPage()
+        self.list = []
 
     def initPage(self):
-        Label(self, text="用户列表页面内容").pack()
-        Label(self, text="你好你好你好你好").pack(expand=YES, fill=BOTH)
-        Label(self, text="类似于弹出窗口，具有独立的窗口属性。", width=150).pack()
 
+        self.list = dbcontent.user_list()
+        # print(self.list)
+        Label(self, text="ID", width=10, fg="black", bg="#ddd").grid(row=0, column=0, sticky=W + E)
+        Label(self, text="姓名", width=20, fg="black", bg="#ddd").grid(row=0, column=1, sticky=W + E)
+        Label(self, text="密码", width=20, fg="black", bg="#ddd").grid(row=0, column=2, sticky=W + E)
+        Label(self, text="操作", width=20, fg="black", bg="#ddd").grid(row=0, column=3, columnspan=4, sticky=W + E)
+
+        r = 1
+        for item in self.list:
+            Label(self, text=item["id"], relief=RIDGE).grid(row=r, column=0, sticky=W + E)
+            Label(self, text=item["name"], relief=RIDGE).grid(row=r, column=1, sticky=W + E)
+            Label(self, text=item["password"], relief=RIDGE).grid(row=r, column=2, sticky=W + E)
+            Button(self, text="文章", command=lambda: self.userArticle(item)).grid(row=r, column=3, sticky=W + E)
+            Button(self, text="详情", command=lambda: self.userInfo(item)).grid(row=r, column=4, sticky=W + E)
+            Button(self, text="编辑", command=lambda: self.userEdit(item)).grid(row=r, column=5, sticky=W + E)
+            Button(self, text="删除", command=lambda: self.userDelete(item)).grid(row=r, column=6, sticky=W + E)
+            r = r + 1
+
+        # count = 0
+        # l = len(self.list)
+        # while count < l:
+        #     cur = count
+        #     Label(self, text=self.list[count]["id"], relief=RIDGE).grid(row=count, column=0, sticky=W + E)
+        #     Label(self, text=self.list[count]["name"], relief=RIDGE).grid(row=count, column=1, sticky=W + E)
+        #     Label(self, text=self.list[count]["password"], relief=RIDGE).grid(row=count, column=2, sticky=W + E)
+        #     Button(self, text="文章", command=lambda: self.userArticle(self.list[cur])).grid(row=count, column=3, sticky=W + E)
+        #     Button(self, text="详情", command=lambda: self.userInfo(self.list[cur])).grid(row=count, column=4, sticky=W + E)
+        #     Button(self, text="编辑", command=lambda: self.userEdit(self.list[cur])).grid(row=count, column=5, sticky=W + E)
+        #     Button(self, text="删除", command=lambda: self.userDelete(self.list[cur])).grid(row=count, column=6, sticky=W + E)
+        #     count = count + 1
+        # else:
+        #     print (count, "结束")
+
+
+        Label(self, text="底部操作栏").grid(sticky=W + E + S)
+
+    def userArticle(self, userid):
+        print("用户文章", userid)
+
+    def userInfo(self, userid):
+        print("用户详情", userid)
+
+    def userEdit(self, userid):
+        print("用户编辑", userid)
+
+    def userDelete(self, userid):
+        print("用户删除", userid)
 
 class UserAddFrame(Frame):
     """用户添加"""
@@ -119,7 +165,7 @@ class UserAddFrame(Frame):
         # print(event)
         n = self.username.get()
         p = self.password.get()
-        res =  dbcontent.user_add(n, p)
+        res = dbcontent.user_add(n, p)
         if res is True:
             self.username.set("")
             self.password.set("")
