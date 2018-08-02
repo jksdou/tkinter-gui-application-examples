@@ -4,6 +4,7 @@
 import tkinter as gui
 import tkinter.messagebox
 
+import dbcontent
 from common import set_window_center
 from menu import initLoginMenu
 from page import MainPage
@@ -49,7 +50,9 @@ class Login(object):
         # print(event)
         n = self.username.get()
         p = self.password.get()
-        if n == "admin" and p == "admin":
+        res = dbcontent.user_login(n, p)
+        if res is True:
+            # if n == "admin" and p == "admin": # 测试账号
             self.page.destroy()
             MainPage(self.root)
         else:
