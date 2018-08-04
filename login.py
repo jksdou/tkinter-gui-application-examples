@@ -7,7 +7,7 @@ import tkinter.messagebox
 import dbcontent
 from common import set_window_center
 from menu import initLoginMenu
-from page import MainPage
+from view import MainPage
 
 
 class Login(object):
@@ -28,31 +28,30 @@ class Login(object):
         self.page = gui.Frame(self.root)  # 创建Frame
         self.page.pack()
 
-        gui.Label(self.page).grid(row=0, stick=gui.W)
+        gui.Label(self.page).grid(row=0, stick="W")
 
-        gui.Label(self.page, text="账户: ").grid(row=1, stick=gui.W, pady=10)
+        gui.Label(self.page, text="账户: ").grid(row=1, stick="W", pady=10)
         username = gui.Entry(self.page, textvariable=self.username)
-        username.grid(row=1, column=1, stick=gui.E)
+        username.grid(row=1, column=1, stick="E")
         username.bind("<Return>", self.returnEnvent)
 
-        gui.Label(self.page, text="密码: ").grid(row=2, stick=gui.W, pady=10)
+        gui.Label(self.page, text="密码: ").grid(row=2, stick="W", pady=10)
         password = gui.Entry(self.page, textvariable=self.password, show="*")
-        password.grid(row=2, column=1, stick=gui.E)
+        password.grid(row=2, column=1, stick="E")
         password.bind("<Return>", self.returnEnvent)
 
         button_login = gui.Button(self.page, text="登陆", command=self.doLogin)
-        button_login.grid(row=3, column=1, stick=gui.W, pady=10)
+        button_login.grid(row=3, column=1, stick="W", pady=10)
 
         button_cancel = gui.Button(self.page, text="退出", command=self.doCancel)
-        button_cancel.grid(row=3, column=1, stick=gui.E)
+        button_cancel.grid(row=3, column=1, stick="E")
 
     def doLogin(self):
-        # print(event)
-        n = self.username.get()
-        p = self.password.get()
-        res = dbcontent.user_login(n, p)
+        username = self.username.get()
+        password = self.password.get()
+        res = dbcontent.user_login(username, password)
         if res is True:
-            # if n == "admin" and p == "admin": # 测试账号
+            # if username == "admin" and password == "admin": # 测试账号
             self.page.destroy()
             MainPage(self.root)
         else:

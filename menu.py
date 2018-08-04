@@ -5,7 +5,7 @@ import tkinter as gui
 from tkinter import messagebox
 
 
-class initMenu:
+class InitMenu:
     """主界面菜单"""
 
     def __init__(self, master):
@@ -30,15 +30,15 @@ class initMenu:
 
         # 用户下拉菜单
         usermenu = gui.Menu(self.menubar, tearoff=0)
-        usermenu.add_command(label="用户列表", command=self.page.openUserList)
-        usermenu.add_command(label="用户添加", command=self.page.openUserAdd)
-        usermenu.add_command(label="用户详情窗口", command=self.page.openUser)
+        usermenu.add_command(label="用户列表", command=self.page.open_user_list)
+        usermenu.add_command(label="用户添加", command=self.page.open_user_add)
+        usermenu.add_command(label="用户详情窗口", command=self.page.open_user_info)
 
         # 文章下拉菜单
         articlemenu = gui.Menu(self.menubar, tearoff=0)
-        articlemenu.add_command(label="文章查询", command=self.page.queryData)
-        articlemenu.add_command(label="文章添加", command=self.page.inputData)
-        articlemenu.add_command(label="文章统计", command=self.page.countData)
+        articlemenu.add_command(label="文章查询", command=self.page.open_content_list)
+        articlemenu.add_command(label="文章添加", command=self.page.open_content_add)
+        articlemenu.add_command(label="文章统计", command=self.page.open_content_count)
 
         # 数据下拉菜单
         datamenu = gui.Menu(self.menubar, tearoff=0)
@@ -51,11 +51,11 @@ class initMenu:
         helpmenu = gui.Menu(self.menubar, tearoff=0)
         helpmenu.add_command(label="欢迎使用", command=self.help_about)
         helpmenu.add_command(label="文档", command=self.help_about)
-        helpmenu.add_command(label="查看许可", command=self.help_about)
+        helpmenu.add_command(label="版权声明", command=self.help_about)
         helpmenu.add_command(label="隐私声明", command=self.help_about)
         helpmenu.add_separator()
-        helpmenu.add_command(label="版权声明", command=self.page.openContact)
-        helpmenu.add_command(label="联系我们", command=self.page.openContact)
+        helpmenu.add_command(label="联系我们", command=self.page.open_ontact)
+        helpmenu.add_command(label="关于", command=self.page.open_about)
 
         # 将下拉菜单加到菜单栏
         self.menubar.add_cascade(label="文件", menu=filemenu)

@@ -10,8 +10,8 @@ def user_login(username, password):
         return False
     else:
         # session['username'] = name
-        db = DBHelper()
-        if db.has_user(username, password):
+        _db = DBHelper()
+        if _db.has_user(username, password):
             return True
         else:
             return False
@@ -24,12 +24,26 @@ def user_add(username, password):
     if password is None:
         return "密码不能为空"
     if (username is not None) and (password is not None):
-        db = DBHelper()
-        return db.insert_user(username, password)
+        _db = DBHelper()
+        return _db.insert_user(username, password)
 
 
 def user_list():
     """用户列表"""
-    db = DBHelper()
-    return db.get_all_user_info()
+    _db = DBHelper()
+    return _db.get_all_user_info()
 
+
+def content_add(username, title, content, tag):
+    """添加内容"""
+    if username is None:
+        return "账号不能为空"
+    if content is None:
+        return "内容不能为空"
+    _db = DBHelper()
+    return _db.insert_content_by_username(username, title, content, tag) is True
+
+def content_list():
+    """用户的所有文章"""
+    _db = DBHelper()
+    return _db.get_content_by_username('admin')

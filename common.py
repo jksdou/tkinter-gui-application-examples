@@ -2,21 +2,23 @@
 # -*- coding: UTF-8 -*-
 
 
-def set_window_center(window, w, h):
+def set_window_center(window, width, height):
     """设置窗口宽高及居中"""
     # 获取屏幕 宽、高
-    ws = window.winfo_screenwidth()
-    hs = window.winfo_screenheight()
+    w_s = window.winfo_screenwidth()
+    h_s = window.winfo_screenheight()
     # 计算 x, y 位置
-    x = (ws - w) / 2
-    y = (hs - h) / 2 - 50
-    window.geometry("%dx%d+%d+%d" % (w, h, x, y))
-    window.minsize(w, h)
+    x_co = (w_s - width) / 2
+    y_co = (h_s - height) / 2 - 50
+    window.geometry("%dx%d+%d+%d" % (width, height, x_co, y_co))
+    window.minsize(width, height)
 
 
 def get_screen_size(window):
+    """获取屏幕 宽、高"""
     return window.winfo_screenwidth(), window.winfo_screenheight()
 
 
 def get_window_size(window):
+    """获取窗口 宽、高"""
     return window.winfo_reqwidth(), window.winfo_reqheight()
