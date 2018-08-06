@@ -3,6 +3,7 @@
 
 import tkinter.messagebox
 from tkinter import *
+from tkinter import ttk
 
 import dbcontent
 from common import set_window_center
@@ -167,53 +168,48 @@ class UserListFrame(Frame):
 
     def init_page(self):
         """加载控件"""
-        self.user_list = dbcontent.user_list()
-        Label(self, text="ID", width=10, fg="black", bg="#ddd").grid(
-            row=0, column=0, sticky="WE")
-        Label(self, text="姓名", width=20, fg="black", bg="#ddd").grid(
-            row=0, column=1, sticky="WE")
-        Label(self, text="密码", width=20, fg="black", bg="#ddd").grid(
-            row=0, column=2, sticky="WE")
-        Label(self, text="操作", width=20, fg="black", bg="#ddd").grid(
-            row=0, column=3, columnspan=4, sticky="WE")
 
+        # Label(self, text="所有用户").grid(sticky="w")
+
+        head_frame = tkinter.LabelFrame(self, text="用户操作")
+        head_frame.grid(row=0, column=0, columnspan=2, sticky="nswe")
+        left = tkinter.Label(head_frame, text="Inside the LabelFrame")
+        left.pack()
+
+        btn_info = tkinter.Button(head_frame, text="详情").pack(side="left")
+        btn_edit = tkinter.Button(head_frame, text="编辑").pack(side="left")
+        btn_reset = tkinter.Button(head_frame, text="重置密码").pack(side="left")
+        btn_delete = tkinter.Button(head_frame, text="删除").pack(side="left")
+
+        # 表格
+        tree = ttk.Treeview(self, show="headings")
+
+        tree["columns"] = ("id", "name", "password", "op")
+
+        # tree.column("id", width=100) # 表示列,不显示
+        # tree.column("name", width=100)
+        # tree.column("password", width=100)
+        # tree.column("op", width=100)
+        # 显示表头
+        tree.heading("id", text="ID")
+        tree.heading("name", text="姓名")
+        tree.heading("password", text="密码")
+        tree.heading("op", text="操作")
+
+        # 插入数据
         r = 1
         for item in self.user_list:
-            Label(self, text=item["id"], relief=RIDGE).grid(
-                row=r, column=0, sticky="WE")
-            Label(self, text=item["name"], relief=RIDGE).grid(
-                row=r, column=1, sticky="WE")
-            Label(self, text=item["password"], relief=RIDGE).grid(
-                row=r, column=2, sticky="WE")
-            Button(self, text="文章", command=lambda: self.userArticle(
-                item)).grid(row=r, column=3, sticky="WE")
-            Button(self, text="详情", command=lambda: self.userInfo(
-                item)).grid(row=r, column=4, sticky="WE")
-            Button(self, text="编辑", command=lambda: self.userEdit(
-                item)).grid(row=r, column=5, sticky="WE")
-            Button(self, text="删除", command=lambda: self.userDelete(
-                item)).grid(row=r, column=6, sticky="WE")
-            r = r + 1
+            tree.insert("", r, text="" , values=(item["id"], item["name"], item["password"], "详情"))
+        # tree.pack()
+        vbar = ttk.Scrollbar(self, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=vbar.set)
+        tree.grid(row=1, column=0, sticky="nsew")
+        vbar.grid(row=1, column=1, sticky="ns")
+        Label(self, text="底部操作栏").grid(sticky="swe")
 
-        # count = 0
-        # l = len(self.list)
-        # while count < l:
-        #     cur = count
-        #     Label(self, text=self.list[count]["id"], relief=RIDGE).grid(row=count, column=0, sticky="WE")
-        #     Label(self, text=self.list[count]["name"], relief=RIDGE).grid(row=count, column=1, sticky="WE")
-        #     Label(self, text=self.list[count]["password"], relief=RIDGE).grid(row=count, column=2, sticky="WE")
-        #     Button(self, text="文章", command=lambda: self.userArticle(self.list[cur])).grid(row=count, column=3, sticky="WE")
-        #     Button(self, text="详情", command=lambda: self.userInfo(self.list[cur])).grid(row=count, column=4, sticky="WE")
-        #     Button(self, text="编辑", command=lambda: self.userEdit(self.list[cur])).grid(row=count, column=5, sticky="WE")
-        #     Button(self, text="删除", command=lambda: self.userDelete(self.list[cur])).grid(row=count, column=6, sticky="WE")
-        #     count = count + 1
-        # else:
-        #     print (count, "结束")
-
-        Label(self, text="底部操作栏").grid(sticky="WES")
-
-    def userArticle(self, userid):
-        print("用户文章", userid)
+    def userArticle(self, event):
+        print("用户文章", self)
+        print("用户文章1", event)
 
     def userInfo(self, userid):
         print("用户详情", userid)
