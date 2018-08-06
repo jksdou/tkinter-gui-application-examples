@@ -8,7 +8,6 @@ from common import set_window_center
 from menu import InitMenu
 from pages import winAbout
 
-
 class MainPage():
     """主界面"""
     def __init__(self, master=None):
@@ -30,7 +29,7 @@ class MainPage():
         self.win_about = None
 
     def open_page(self, frame_name, title):
-        """打开界面的通用函数"""
+        """打开/更换主界面的通用函数"""
         self.page.title(title)
         # 先销毁之前frame
         if self.current_frame is not None and (hasattr(self.current_frame.destroy, '__call__')):
