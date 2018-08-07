@@ -2,18 +2,23 @@
 # -*- coding: UTF-8 -*-
 
 import os
-import tkinter as gui
+from tkinter import Tk
 
 import lib.global_variable as glv
-from login import Login
+from pages import frameLogin
 
-glv._init()
 
-glv.set("APP_PATH", os.path.dirname(__file__))
-glv.set("DATA_DIR", "data")
+class App(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        # 全局变量
+        glv._init()
+        glv.set("APP_PATH", os.path.dirname(__file__)) # 当前目录
+        glv.set("DATA_DIR", "data")
 
-ROOT = gui.Tk()
+        frameLogin.Login(self)
 
-Login(ROOT)
 
-ROOT.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

@@ -6,8 +6,8 @@ import tkinter.messagebox
 
 import lib.dbcontent as dbcontent
 from lib.functions import set_window_center
-from menu import initLoginMenu
-from view import MainPage
+from components.menu import initLoginMenu
+from components.view import MainPage
 
 
 class Login(object):

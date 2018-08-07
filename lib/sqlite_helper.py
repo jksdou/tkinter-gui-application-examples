@@ -8,11 +8,12 @@ import lib.global_variable as glv
 class DBHelper(object):
     def __init__(self):
         self.db_path = os.path.join(glv.get("APP_PATH"), glv.get("DATA_DIR"), 'database.db')
-        # self.db_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data/database.db')
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
 
+
     def create_database(self):
+        """创建表"""
         self.cursor.execute('''create table IF NOT EXISTS user(id INTEGER PRIMARY KEY, name TEXT, password TEXT)''')
         self.cursor.execute('''create table IF NOT EXISTS user_content(id INTEGER, userid INTEGER)''')
         self.cursor.execute('''create table IF NOT EXISTS content(id INTEGER, title TEXT, content TEXT, tag TEXT)''')
@@ -20,6 +21,14 @@ class DBHelper(object):
         self.cursor.execute('''create unique index IF NOT EXISTS user_content_unique_index on user_content(id)''')
         self.cursor.execute('''create unique index IF NOT EXISTS content_unique_index on content(id)''')
         self.conn.commit()
+
+    def reset_database(self):
+        """重置表"""
+        self.cursor.execute("DROP TABLE IF EXISTS user")
+        self.cursor.execute("DROP TABLE IF EXISTS user_content")
+        self.cursor.execute("DROP TABLE IF EXISTS content")
+        self.conn.commit()
+        self.create_database()
 
     def insert_user(self, name, password):
         name = name.strip()

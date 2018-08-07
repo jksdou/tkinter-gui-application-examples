@@ -4,5 +4,6 @@
 __all__ = [
     "winAbout",
     "winContentInfo",
-    "winContentEdit"
+    "winContentEdit",
+    "frameLogin"
 ]

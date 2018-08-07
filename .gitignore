@@ -17,5 +17,4 @@ selenium-debug.log
 *.njsproj
 *.sln
 *config.ini
-*DATA.db
 *database.db
