@@ -1,5 +1,12 @@
 # A Desktop App based on Tkinter
 
+## Features
+- menu
+- user login
+- User add, edit, delete
+- Content addition, editing, deletion
+- View switching, window management, etc.
+
 ## Installation
 
 ```shell
