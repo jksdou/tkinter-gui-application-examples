@@ -12,7 +12,7 @@ class Init(gui.Toplevel):
     def __init__(self, info=None):
         gui.Toplevel.__init__(self)
         self.current_content = info
-        self.win_title = "编辑内容《" + self.current_content["values"][1] + "》"
+        self.win_title = "内容编辑《" + self.current_content["values"][1] + "》"
         self.title(self.win_title)
         set_window_center(self, 400, 500)
         self.resizable(False, False)

@@ -7,7 +7,7 @@ from tkinter import ttk
 
 import lib.dbcontent as dbcontent
 from lib.functions import set_window_center, treeview_sort_column
-from pages import winContentInfo, winContentEdit
+from pages import winContentInfo, winContentEdit, win_user_info, win_user_edit
 
 
 class HomeFrame(Frame):  # 继承Frame类
@@ -143,8 +143,7 @@ class ContentList(Frame):
             self.tree_view.heading(col, text=col, command=lambda _col=col: treeview_sort_column(
                 self.tree_view, _col, False))
 
-        vbar = ttk.Scrollbar(self, orient="vertical",
-                             command=self.tree_view.yview)
+        vbar = ttk.Scrollbar(self, orient="vertical", command=self.tree_view.yview)
         self.tree_view.configure(yscrollcommand=vbar.set)
         self.tree_view.grid(row=1, column=0, sticky="nsew")
         vbar.grid(row=1, column=1, sticky="ns")
@@ -221,63 +220,101 @@ class UserListFrame(Frame):
     def __init__(self, parent=None):
         Frame.__init__(self, parent)
         self.root = parent
-        self.list = dbcontent.user_list()
+        self.list = []
+        self.selected_item = None
+        self.selected_name = tkinter.StringVar()
+        self.win_user_info = None
+        self.win_user_edit = None
         self.init_page()
 
     def init_page(self):
         """加载控件"""
 
-        # Label(self, text="所有用户").grid(sticky="w")
+        self.list = dbcontent.user_list()
 
         head_frame = tkinter.LabelFrame(self, text="用户操作")
         head_frame.grid(row=0, column=0, columnspan=2, sticky="nswe")
-        left = tkinter.Label(head_frame, text="Inside the LabelFrame")
-        left.pack()
+        tkinter.Label(head_frame, textvariable=self.selected_name).pack()
 
-        btn_info = tkinter.Button(head_frame, text="详情").pack(side="left")
-        btn_edit = tkinter.Button(head_frame, text="编辑").pack(side="left")
-        btn_reset = tkinter.Button(head_frame, text="重置密码").pack(side="left")
-        btn_delete = tkinter.Button(head_frame, text="删除").pack(side="left")
+        btn_info = tkinter.Button(head_frame, text="详情", command=self.info)
+        btn_info.pack(side="left")
+        btn_edit = tkinter.Button(head_frame, text="编辑", command=self.edit)
+        btn_edit.pack(side="left")
+        btn_reset = tkinter.Button(head_frame, text="重置密码", command=self.reset)
+        btn_reset.pack(side="left")
+        btn_delete = tkinter.Button(head_frame, text="删除", command=self.delete)
+        btn_delete.pack(side="left")
 
         # 表格
-        tree = ttk.Treeview(self, show="headings")
+        self.tree_view = ttk.Treeview(self, show="headings")
 
-        tree["columns"] = ("id", "name", "password", "op")
-
-        # tree.column("id", width=100) # 表示列,不显示
-        # tree.column("name", width=100)
-        # tree.column("password", width=100)
-        # tree.column("op", width=100)
+        self.tree_view["columns"] = ("id", "name", "password", "op")
+        # 列设置
+        # self.tree_view.column("id", width=100) # 表示列,不显示
+        # self.tree_view.column("name", width=100)
+        # self.tree_view.column("password", width=100)
+        # self.tree_view.column("op", width=100)
         # 显示表头
-        tree.heading("id", text="ID")
-        tree.heading("name", text="姓名")
-        tree.heading("password", text="密码")
-        tree.heading("op", text="操作")
+        self.tree_view.heading("id", text="ID")
+        self.tree_view.heading("name", text="姓名")
+        self.tree_view.heading("password", text="密码")
+        self.tree_view.heading("op", text="操作")
 
         # 插入数据
         num = 1
         for item in self.list:
-            tree.insert("", num, text="", values=(
+            self.tree_view.insert("", num, text="", values=(
                 item["id"], item["name"], item["password"], "详情"))
-        # tree.pack()
-        vbar = ttk.Scrollbar(self, orient="vertical", command=tree.yview)
-        tree.configure(yscrollcommand=vbar.set)
-        tree.grid(row=1, column=0, sticky="nsew")
+        # 选中行
+        self.tree_view.bind("<<TreeviewSelect>>", self.select)
+
+        # 排序
+        for col in self.tree_view["columns"]:  # 给所有标题加
+            self.tree_view.heading(col, text=col, command=lambda _col=col: treeview_sort_column(
+                self.tree_view, _col, False))
+
+        vbar = ttk.Scrollbar(self, orient="vertical", command=self.tree_view.yview)
+        self.tree_view.configure(yscrollcommand=vbar.set)
+        self.tree_view.grid(row=1, column=0, sticky="nsew")
         vbar.grid(row=1, column=1, sticky="ns")
         Label(self, text="底部操作栏").grid(sticky="swe")
 
-    def userArticle(self, event):
-        print("用户文章", self)
-        print("用户文章1", event)
+    def select(self, event):
+        """选中"""
+        # event.widget获取Treeview对象，调用selection获取选择所有选中的
+        slct = event.widget.selection()[0]
+        self.selected_item = self.tree_view.item(slct)
+        self.selected_name.set(self.selected_item["values"][1])
 
-    def userInfo(self, userid):
-        print("用户详情", userid)
+    def info(self):
+        print("详情", self.selected_item)
+        if self.selected_item is None:
+            tkinter.messagebox.showinfo("提示", "请先选择")
+        else:
+            if self.win_user_info is not None and (
+                hasattr(self.win_user_info.destroy, "__call__")):
+                self.win_user_info.destroy()
+            self.win_user_info = win_user_info.Init(self.selected_item)
 
-    def userEdit(self, userid):
-        print("用户编辑", userid)
+    def edit(self):
+        """用户编辑"""
+        print("编辑", self.selected_item)
+        if self.selected_item is None:
+            tkinter.messagebox.showinfo("提示", "请先选择")
+        else:
+            if self.win_user_edit is not None and hasattr(self.win_user_edit.destroy, "__call__"):
+                self.win_user_edit.destroy()
+            self.win_user_edit = win_user_edit.Init(self.selected_item)
 
-    def userDelete(self, userid):
-        print("用户删除", userid)
+
+    def delete(self):
+        """用户删除"""
+        print(self.selected_item)
+        tkinter.messagebox.showinfo("删除用户？", self.selected_item)  # 弹出消息提示框
+
+
+    def reset(self):
+        print("用户删除")
 
 
 class UserAddFrame(Frame):
