@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import tkinter as gui
-from common import set_window_center
+from lib.functions import set_window_center
 
 
 class Init(gui.Toplevel):

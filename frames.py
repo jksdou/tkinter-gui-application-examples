@@ -5,8 +5,8 @@ import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 
-import dbcontent
-from common import set_window_center, treeview_sort_column
+import lib.dbcontent as dbcontent
+from lib.functions import set_window_center, treeview_sort_column
 from pages import winContentInfo, winContentEdit
 
 

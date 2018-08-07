@@ -3,7 +3,7 @@
 
 import tkinter as gui
 from tkinter import messagebox
-
+import lib.global_variable as gl
 
 class InitMenu:
     """主界面菜单"""
@@ -89,6 +89,8 @@ class InitMenu:
         pass
 
     def help_about(self):
+
+        print(gl.get('APP_PATH'))
         messagebox.showinfo(
             "关于", "作者：kinfinger \n verion 1.0 \n 感谢您的使用！ \n kinfinge@gmail.com "
         )  # 弹出消息提示框

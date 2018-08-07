@@ -4,8 +4,8 @@
 import tkinter as gui
 import tkinter.messagebox
 
-import dbcontent
-from common import set_window_center
+import lib.dbcontent as dbcontent
+from lib.functions import set_window_center
 from menu import initLoginMenu
 from view import MainPage
 

@@ -4,7 +4,7 @@
 import tkinter as gui
 
 import frames
-from common import set_window_center
+from lib.functions import set_window_center
 from menu import InitMenu
 from pages import winAbout
 

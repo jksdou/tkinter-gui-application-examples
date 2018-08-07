@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8-*-
 
-from SQLiteHelper import DBHelper
+from lib.sqlite_helper import DBHelper
 
 if __name__ == '__main__':
     db = DBHelper()
