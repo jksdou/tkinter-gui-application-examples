@@ -6,14 +6,16 @@ import sqlite3
 import lib.global_variable as glv
 
 class DBHelper(object):
+    """sqlite helper"""
+
     def __init__(self):
-        self.db_path = os.path.join(glv.get("APP_PATH"), glv.get("DATA_DIR"), 'database.db')
+        self.db_path = os.path.join(glv._get("APP_PATH"), glv._get("DATA_DIR"), 'database.db')
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
 
 
     def create_database(self):
-        """创建表"""
+        """create table"""
         self.cursor.execute('''create table IF NOT EXISTS user(id INTEGER PRIMARY KEY, name TEXT, password TEXT)''')
         self.cursor.execute('''create table IF NOT EXISTS user_content(id INTEGER, userid INTEGER)''')
         self.cursor.execute('''create table IF NOT EXISTS content(id INTEGER, title TEXT, content TEXT, tag TEXT)''')
@@ -23,7 +25,7 @@ class DBHelper(object):
         self.conn.commit()
 
     def reset_database(self):
-        """重置表"""
+        """drop table"""
         self.cursor.execute("DROP TABLE IF EXISTS user")
         self.cursor.execute("DROP TABLE IF EXISTS user_content")
         self.cursor.execute("DROP TABLE IF EXISTS content")
@@ -31,6 +33,7 @@ class DBHelper(object):
         self.create_database()
 
     def insert_user(self, name, password):
+        """insert user"""
         name = name.strip()
         password = password.strip()
         info = name, password
@@ -42,6 +45,7 @@ class DBHelper(object):
             return False
 
     def has_user(self, name, password):
+        """check user"""
         name = name.strip()
         password = password.strip()
         info = name, password
@@ -54,6 +58,7 @@ class DBHelper(object):
             return True
 
     def get_all_user_info(self):
+        """get list of all user"""
         list = []
         rows = self.cursor.execute('SELECT id, name, password FROM user')
         for item in rows:
@@ -65,6 +70,7 @@ class DBHelper(object):
         return list
 
     def insert_content_by_username(self, username, title, content, tag):
+        """insert content by username"""
         try:
             userid = self.cursor.execute('SELECT id FROM user WHERE name=?',
                 (username, )).fetchone()
@@ -83,6 +89,7 @@ class DBHelper(object):
             return False
 
     def get_content_by_username(self, name):
+        """get content list of user by username"""
         list = []
         userid = self.cursor.execute(
             'SELECT id FROM user WHERE name=?', (name, )).fetchone()

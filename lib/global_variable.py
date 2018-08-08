@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8-*-
-# 全局变量管理模块
+# global variable management module
 
 
 def _init():
-    """在主模块初始化"""
+    """initialize variable"""
     global GLOBALS_DICT
     GLOBALS_DICT = {}
 
 
-def set(name, value):
-    """设置"""
+def _set(name, value):
+    """set variable"""
     try:
         GLOBALS_DICT[name] = value
         return True
@@ -18,8 +18,8 @@ def set(name, value):
         return False
 
 
-def get(name):
-    """取值"""
+def _get(name):
+    """get variable"""
     try:
         return GLOBALS_DICT[name]
     except KeyError:

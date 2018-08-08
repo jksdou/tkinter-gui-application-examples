@@ -9,16 +9,20 @@ from pages import frameLogin
 
 
 class App(Tk):
+    """Application Class"""
+
     def __init__(self):
         Tk.__init__(self)
-        # 全局变量
-        glv._init()
-        glv.set("APP_PATH", os.path.dirname(__file__)) # 当前目录
-        glv.set("DATA_DIR", "data")
 
+        # Load global variable management module
+        glv._init()
+        glv._set("APP_PATH", os.path.dirname(__file__)) # 当前目录
+        glv._set("DATA_DIR", "data")
+
+        # Login Window
         frameLogin.Login(self)
 
 
 if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    APP_INIT = App()
+    APP_INIT.mainloop()

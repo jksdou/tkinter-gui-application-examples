@@ -3,27 +3,27 @@
 
 import tkinter as gui
 
-import components.frames
+from components import frames, menu
 from lib.functions import set_window_center
-from components.menu import InitMenu
 from pages import winAbout
+
 
 class MainPage():
     """主界面"""
     def __init__(self, master=None):
         self.page = master
         set_window_center(self.page, 800, 600)
-        InitMenu(self)
+        menu.InitMenu(self)
         self.current_frame = None
         # 初始化Frames
         self.page_frame = {
-            "home": components.frames.HomeFrame,
-            "content_add": components.frames.ContentAdd,
-            "content_list": components.frames.ContentList,
-            "count": components.frames.CountFrame,
-            "contact": components.frames.AboutFrame,
-            "user_list": components.frames.UserListFrame,
-            "user_add": components.frames.UserAddFrame
+            "home": frames.HomeFrame,
+            "content_add": frames.ContentAdd,
+            "content_list": frames.ContentList,
+            "count": frames.CountFrame,
+            "contact": frames.AboutFrame,
+            "user_list": frames.UserListFrame,
+            "user_add": frames.UserAddFrame
         }
         self.open_home()
         self.win_about = None
