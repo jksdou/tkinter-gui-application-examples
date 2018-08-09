@@ -19,9 +19,9 @@ class InitWindow(Tk):
         self.title("初始化数据")
         set_window_center(self, 300, 180)
         self.resizable(False, False)
-        glv._init()
-        glv._set("APP_PATH", os.path.dirname(__file__))
-        glv._set("DATA_DIR", "data")
+        glv.init_global_variable()
+        glv.set_variable("APP_PATH", os.path.dirname(__file__))
+        glv.set_variable("DATA_DIR", "data")
         self.win_success = None # 初始化成功的提示窗口
         self.init_page()
 

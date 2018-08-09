@@ -9,7 +9,7 @@ class DBHelper(object):
     """sqlite helper"""
 
     def __init__(self):
-        self.db_path = os.path.join(glv._get("APP_PATH"), glv._get("DATA_DIR"), 'database.db')
+        self.db_path = os.path.join(glv.get_variable("APP_PATH"), glv.get_variable("DATA_DIR"), 'database.db')
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
 

@@ -15,9 +15,9 @@ class App(Tk):
         Tk.__init__(self)
 
         # Load global variable management module
-        glv._init()
-        glv._set("APP_PATH", os.path.dirname(__file__)) # 当前目录
-        glv._set("DATA_DIR", "data")
+        glv.init_global_variable()
+        glv.set_variable("APP_PATH", os.path.dirname(__file__)) # 当前目录
+        glv.set_variable("DATA_DIR", "data")
 
         # Login Window
         frameLogin.Login(self)

@@ -3,13 +3,13 @@
 # global variable management module
 
 
-def _init():
+def init_global_variable():
     """initialize variable"""
     global GLOBALS_DICT
     GLOBALS_DICT = {}
 
 
-def _set(name, value):
+def set_variable(name, value):
     """set variable"""
     try:
         GLOBALS_DICT[name] = value
@@ -18,7 +18,7 @@ def _set(name, value):
         return False
 
 
-def _get(name):
+def get_variable(name):
     """get variable"""
     try:
         return GLOBALS_DICT[name]
