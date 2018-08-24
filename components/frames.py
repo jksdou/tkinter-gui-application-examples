@@ -4,6 +4,7 @@
 import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
 
 import lib.dbcontent as dbcontent
 from lib.functions import set_window_center, treeview_sort_column
@@ -34,7 +35,7 @@ class ContentAdd(Frame):
         Frame.__init__(self, parent)
         self.root = parent  # 定义内部变量root
         self.content_title = StringVar()
-        self.content = StringVar()
+        self.content_textarea = None
         self.content_tag = StringVar()
         self.init_page()
 
@@ -51,15 +52,16 @@ class ContentAdd(Frame):
         lb2 = Label(self, text="内容: ")
         lb2.grid(row=2, stick="nw", pady=10)
 
-        et2 = Text(self, height=10)
-        sl = Scrollbar(et2)
-        sl.config(command=et2.yview)
-        # sl.grid(stick=N+S+E)
-        sl.pack(side=RIGHT, fill=Y)
-        et2.config(yscrollcommand=sl.set)
-        # quote = """HAMLET: To b"""
-        # et2.insert(END, quote)
+        et2 = ScrolledText(
+            self,
+            height=10,
+            font=("Courier New", 13),
+            fg="#333",
+            borderwidth=1,
+            highlightcolor="#ddd",
+        )
         et2.grid(row=2, column=1, ipadx=10, stick="nswe")
+        self.content_textarea = et2
 
         lb3 = Label(self, text="标签: ")
         lb3.grid(row=3, stick=W, pady=10)
@@ -73,14 +75,15 @@ class ContentAdd(Frame):
     def do_add(self):
         """添加文章"""
         title = self.content_title.get()
-        content = self.content.get()
+        content = self.content_textarea.get(0.0, "end")
         tag = self.content_tag.get()
         username = "admin"
         res = dbcontent.content_add(username, title, content, tag)
         if res is True:
             self.content_title.set("")
-            self.content.set("")
             self.content_tag.set("")
+            self.content_textarea.delete(1.0, "end")  # 清空
+            self.content_textarea.update()
             tkinter.messagebox.showinfo(title="成功", message="添加成功")
         else:
             tkinter.messagebox.showinfo(title="错误", message="添加失败")
@@ -133,15 +136,24 @@ class ContentList(Frame):
         # 插入数据
         num = 1
         for item in self.list:
-            self.tree_view.insert("", num, text="", values=(
-                item["id"], item["title"], item["content"], item["tag"]))
+            self.tree_view.insert(
+                "",
+                num,
+                text="",
+                values=(item["id"], item["title"], item["content"], item["tag"]),
+            )
         # 选中行
         self.tree_view.bind("<<TreeviewSelect>>", self.select)
 
         # 排序
         for col in self.tree_view["columns"]:  # 给所有标题加
-            self.tree_view.heading(col, text=col, command=lambda _col=col: treeview_sort_column(
-                self.tree_view, _col, False))
+            self.tree_view.heading(
+                col,
+                text=col,
+                command=lambda _col=col: treeview_sort_column(
+                    self.tree_view, _col, False
+                ),
+            )
 
         vbar = ttk.Scrollbar(self, orient="vertical", command=self.tree_view.yview)
         self.tree_view.configure(yscrollcommand=vbar.set)
@@ -164,8 +176,9 @@ class ContentList(Frame):
             tkinter.messagebox.showinfo("提示", "请先选择")
         else:
             if self.win_content_info is not None and (
-                hasattr(self.win_content_info.destroy, '__call__')):
-            # if self.win_content_info and self.win_content_info.destroy:
+                hasattr(self.win_content_info.destroy, "__call__")
+            ):
+                # if self.win_content_info and self.win_content_info.destroy:
                 self.win_content_info.destroy()
             self.win_content_info = winContentInfo.Init(self.selected_item)
             # self.win_content_info = winAbout.Init()
@@ -263,15 +276,24 @@ class UserListFrame(Frame):
         # 插入数据
         num = 1
         for item in self.list:
-            self.tree_view.insert("", num, text="", values=(
-                item["id"], item["name"], item["password"], "详情"))
+            self.tree_view.insert(
+                "",
+                num,
+                text="",
+                values=(item["id"], item["name"], item["password"], "详情"),
+            )
         # 选中行
         self.tree_view.bind("<<TreeviewSelect>>", self.select)
 
         # 排序
         for col in self.tree_view["columns"]:  # 给所有标题加
-            self.tree_view.heading(col, text=col, command=lambda _col=col: treeview_sort_column(
-                self.tree_view, _col, False))
+            self.tree_view.heading(
+                col,
+                text=col,
+                command=lambda _col=col: treeview_sort_column(
+                    self.tree_view, _col, False
+                ),
+            )
 
         vbar = ttk.Scrollbar(self, orient="vertical", command=self.tree_view.yview)
         self.tree_view.configure(yscrollcommand=vbar.set)
@@ -292,7 +314,8 @@ class UserListFrame(Frame):
             tkinter.messagebox.showinfo("提示", "请先选择")
         else:
             if self.win_user_info is not None and (
-                hasattr(self.win_user_info.destroy, "__call__")):
+                hasattr(self.win_user_info.destroy, "__call__")
+            ):
                 self.win_user_info.destroy()
             self.win_user_info = win_user_info.Init(self.selected_item)
 
@@ -302,16 +325,16 @@ class UserListFrame(Frame):
         if self.selected_item is None:
             tkinter.messagebox.showinfo("提示", "请先选择")
         else:
-            if self.win_user_edit is not None and hasattr(self.win_user_edit.destroy, "__call__"):
+            if self.win_user_edit is not None and hasattr(
+                self.win_user_edit.destroy, "__call__"
+            ):
                 self.win_user_edit.destroy()
             self.win_user_edit = win_user_edit.Init(self.selected_item)
-
 
     def delete(self):
         """用户删除"""
         print(self.selected_item)
         tkinter.messagebox.showinfo("删除用户？", self.selected_item)  # 弹出消息提示框
-
 
     def reset(self):
         print("用户删除")
