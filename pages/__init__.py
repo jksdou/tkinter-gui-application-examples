@@ -7,5 +7,6 @@ __all__ = [
     "winContentEdit",
     "frameLogin",
     "win_user_info",
-    "win_user_edit"
+    "win_user_edit",
+    'win_splah'
 ]
