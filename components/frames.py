@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import tkinter.messagebox
-from tkinter import *
-from tkinter import ttk
-from tkinter.scrolledtext import ScrolledText
+from tkinter import (Button, Label, Frame, Entry, LabelFrame, StringVar, messagebox,
+                     scrolledtext, ttk)
 
 import lib.dbcontent as dbcontent
-from lib.functions import set_window_center, treeview_sort_column
-from pages import winContentInfo, winContentEdit, win_user_info, win_user_edit
+from lib import global_variable
+from lib.functions import treeview_sort_column
+from pages import win_user_edit, win_user_info, winContentEdit, winContentInfo
 
 
 class HomeFrame(Frame):  # 继承Frame类
@@ -21,11 +20,10 @@ class HomeFrame(Frame):  # 继承Frame类
 
     def init_page(self):
         """加载控件"""
-        lb1 = Label(self, text="用户:")
-        lb1.grid(row=1, stick="W", pady=10)
+        Label(self, text="用户:").pack()
 
-        bt1 = Button(self, text="查看")
-        bt1.grid(row=1, column=1, stick=E, pady=10)
+        Label(self, text="欢迎" + str(global_variable.get_variable("CURRENT_USER_NAME"))).pack()
+        Button(self, text="查看").pack()
 
 
 class ContentAdd(Frame):
@@ -41,10 +39,10 @@ class ContentAdd(Frame):
 
     def init_page(self):
         """加载控件"""
-        Label(self).grid(row=0, stick=W, pady=10)
+        Label(self).grid(row=0, stick="w", pady=10)
 
         lb1 = Label(self, text="标题: ")
-        lb1.grid(row=1, stick=W, pady=10)
+        lb1.grid(row=1, stick="w", pady=10)
 
         et1 = Entry(self, textvariable=self.content_title)
         et1.grid(row=1, column=1, stick="we")
@@ -52,7 +50,7 @@ class ContentAdd(Frame):
         lb2 = Label(self, text="内容: ")
         lb2.grid(row=2, stick="nw", pady=10)
 
-        et2 = ScrolledText(
+        et2 = scrolledtext.ScrolledText(
             self,
             height=10,
             font=("Courier New", 13),
@@ -64,29 +62,29 @@ class ContentAdd(Frame):
         self.content_textarea = et2
 
         lb3 = Label(self, text="标签: ")
-        lb3.grid(row=3, stick=W, pady=10)
+        lb3.grid(row=3, stick="w", pady=10)
 
         et3 = Entry(self, textvariable=self.content_tag)
         et3.grid(row=3, column=1, columnspan=2, stick="we")
 
         bt1 = Button(self, text="添加", command=self.do_add)
-        bt1.grid(row=6, column=1, stick=E, pady=10)
+        bt1.grid(row=6, column=1, stick="e", pady=10)
 
     def do_add(self):
         """添加文章"""
         title = self.content_title.get()
         content = self.content_textarea.get(0.0, "end")
         tag = self.content_tag.get()
-        username = "admin"
+        username = str(global_variable.get_variable("CURRENT_USER_NAME"))
         res = dbcontent.content_add(username, title, content, tag)
         if res is True:
             self.content_title.set("")
             self.content_tag.set("")
             self.content_textarea.delete(1.0, "end")  # 清空
             self.content_textarea.update()
-            tkinter.messagebox.showinfo(title="成功", message="添加成功")
+            messagebox.showinfo(title="成功", message="添加成功")
         else:
-            tkinter.messagebox.showinfo(title="错误", message="添加失败")
+            messagebox.showinfo(title="错误", message="添加失败")
 
 
 class ContentList(Frame):
@@ -97,7 +95,7 @@ class ContentList(Frame):
         self.root = parent
         self.list = []
         self.selected_item = None
-        self.selected_name = tkinter.StringVar()
+        self.selected_name = StringVar()
         self.win_content_info = None
         self.win_content_edit = None
         self.init_page()
@@ -105,17 +103,18 @@ class ContentList(Frame):
     def init_page(self):
         """加载控件"""
 
-        self.list = dbcontent.content_list()
+        username = str(global_variable.get_variable("CURRENT_USER_NAME"))
+        self.list = dbcontent.content_list_by_username(username)
 
-        head_frame = tkinter.LabelFrame(self, text="文章操作")
+        head_frame = LabelFrame(self, text="文章操作")
         head_frame.grid(row=0, column=0, columnspan=2, sticky="nswe")
-        tkinter.Label(head_frame, textvariable=self.selected_name).pack()
+        Label(head_frame, textvariable=self.selected_name).pack()
 
-        btn_info = tkinter.Button(head_frame, text="详情", command=self.info)
+        btn_info = Button(head_frame, text="详情", command=self.info)
         btn_info.pack(side="left")
-        btn_edit = tkinter.Button(head_frame, text="编辑", command=self.edit)
+        btn_edit = Button(head_frame, text="编辑", command=self.edit)
         btn_edit.pack(side="left")
-        btn_delete = tkinter.Button(head_frame, text="删除", command=self.delete)
+        btn_delete = Button(head_frame, text="删除", command=self.delete)
         btn_delete.pack(side="left")
 
         # 表格
@@ -173,11 +172,9 @@ class ContentList(Frame):
         """详情"""
         print("详情", self.selected_item)
         if self.selected_item is None:
-            tkinter.messagebox.showinfo("提示", "请先选择")
+            messagebox.showinfo("提示", "请先选择")
         else:
-            if self.win_content_info is not None and (
-                hasattr(self.win_content_info.destroy, "__call__")
-            ):
+            if self.win_content_info is not None and hasattr(self.win_content_info.destroy, "__call__"):
                 # if self.win_content_info and self.win_content_info.destroy:
                 self.win_content_info.destroy()
             self.win_content_info = winContentInfo.Init(self.selected_item)
@@ -187,7 +184,7 @@ class ContentList(Frame):
         """编辑"""
         print("编辑", self.selected_item)
         if self.selected_item is None:
-            tkinter.messagebox.showinfo("提示", "请先选择")
+            messagebox.showinfo("提示", "请先选择")
         else:
             if self.win_content_edit and self.win_content_edit.destroy:
                 self.win_content_edit.destroy()
@@ -196,7 +193,7 @@ class ContentList(Frame):
     def delete(self):
         """删除"""
         print(self.selected_item)
-        tkinter.messagebox.showinfo("删除？", self.selected_item)  # 弹出消息提示框
+        messagebox.showinfo("删除？", self.selected_item)  # 弹出消息提示框
 
 
 class CountFrame(Frame):
@@ -235,7 +232,7 @@ class UserListFrame(Frame):
         self.root = parent
         self.list = []
         self.selected_item = None
-        self.selected_name = tkinter.StringVar()
+        self.selected_name = StringVar()
         self.win_user_info = None
         self.win_user_edit = None
         self.init_page()
@@ -245,17 +242,17 @@ class UserListFrame(Frame):
 
         self.list = dbcontent.user_list()
 
-        head_frame = tkinter.LabelFrame(self, text="用户操作")
+        head_frame = LabelFrame(self, text="用户操作")
         head_frame.grid(row=0, column=0, columnspan=2, sticky="nswe")
-        tkinter.Label(head_frame, textvariable=self.selected_name).pack()
+        Label(head_frame, textvariable=self.selected_name).pack()
 
-        btn_info = tkinter.Button(head_frame, text="详情", command=self.info)
+        btn_info = Button(head_frame, text="详情", command=self.info)
         btn_info.pack(side="left")
-        btn_edit = tkinter.Button(head_frame, text="编辑", command=self.edit)
+        btn_edit = Button(head_frame, text="编辑", command=self.edit)
         btn_edit.pack(side="left")
-        btn_reset = tkinter.Button(head_frame, text="重置密码", command=self.reset)
+        btn_reset = Button(head_frame, text="重置密码", command=self.reset)
         btn_reset.pack(side="left")
-        btn_delete = tkinter.Button(head_frame, text="删除", command=self.delete)
+        btn_delete = Button(head_frame, text="删除", command=self.delete)
         btn_delete.pack(side="left")
 
         # 表格
@@ -309,9 +306,10 @@ class UserListFrame(Frame):
         self.selected_name.set(self.selected_item["values"][1])
 
     def info(self):
+        """详情"""
         print("详情", self.selected_item)
         if self.selected_item is None:
-            tkinter.messagebox.showinfo("提示", "请先选择")
+            messagebox.showinfo("提示", "请先选择")
         else:
             if self.win_user_info is not None and (
                 hasattr(self.win_user_info.destroy, "__call__")
@@ -323,7 +321,7 @@ class UserListFrame(Frame):
         """用户编辑"""
         print("编辑", self.selected_item)
         if self.selected_item is None:
-            tkinter.messagebox.showinfo("提示", "请先选择")
+            messagebox.showinfo("提示", "请先选择")
         else:
             if self.win_user_edit is not None and hasattr(
                 self.win_user_edit.destroy, "__call__"
@@ -334,9 +332,10 @@ class UserListFrame(Frame):
     def delete(self):
         """用户删除"""
         print(self.selected_item)
-        tkinter.messagebox.showinfo("删除用户？", self.selected_item)  # 弹出消息提示框
+        messagebox.showinfo("删除用户？", self.selected_item)  # 弹出消息提示框
 
     def reset(self):
+        """用户删除"""
         print("用户删除")
 
 
@@ -352,18 +351,18 @@ class UserAddFrame(Frame):
 
     def init_page(self):
         """加载控件"""
-        Label(self).grid(row=0, stick=W)
+        Label(self).grid(row=0, stick="w")
 
-        Label(self, text="账户: ").grid(row=1, stick=W, pady=10)
+        Label(self, text="账户: ").grid(row=1, stick="w", pady=10)
         username = Entry(self, textvariable=self.username)
-        username.grid(row=1, column=1, stick=E)
+        username.grid(row=1, column=1, stick="e")
 
-        Label(self, text="密码: ").grid(row=2, stick=W, pady=10)
+        Label(self, text="密码: ").grid(row=2, stick="w", pady=10)
         password = Entry(self, textvariable=self.password, show="*")
-        password.grid(row=2, column=1, stick=E)
+        password.grid(row=2, column=1, stick="e")
 
         button_login = Button(self, text="添加", command=self.do_add)
-        button_login.grid(row=3, column=1, stick=W, pady=10)
+        button_login.grid(row=3, column=1, stick="w", pady=10)
 
     def do_add(self):
         """添加帐号"""
@@ -374,6 +373,6 @@ class UserAddFrame(Frame):
         if res is True:
             self.username.set("")
             self.password.set("")
-            tkinter.messagebox.showinfo(title="成功", message="添加成功")
+            messagebox.showinfo(title="成功", message="添加成功")
         else:
-            tkinter.messagebox.showinfo(title="错误", message="账号已存在")
+            messagebox.showinfo(title="错误", message="账号已存在")

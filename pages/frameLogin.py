@@ -8,6 +8,7 @@ import lib.dbcontent as dbcontent
 from lib.functions import set_window_center
 from components.menu import initLoginMenu
 from components.view import MainPage
+import lib.global_variable as glv
 
 
 class Login(object):
@@ -44,7 +45,7 @@ class Login(object):
         button_login.grid(row=3, column=1, stick="W", pady=10)
 
         button_cancel = gui.Button(self.page, text="退出", command=self.doCancel)
-        button_cancel.grid(row=3, column=1, stick="E")
+        button_cancel.grid(row=3, column=1, stick="e")
 
     def doLogin(self):
         username = self.username.get()
@@ -53,6 +54,8 @@ class Login(object):
         if res is True:
             # if username == "admin" and password == "admin": # 测试账号
             self.page.destroy()
+
+            glv.set_variable("CURRENT_USER_NAME", str(username))
             MainPage(self.root)
         else:
             tkinter.messagebox.showinfo(title="错误", message="账号或密码错误！")

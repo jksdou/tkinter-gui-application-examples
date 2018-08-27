@@ -88,9 +88,10 @@ class InitMenu:
         pass
 
     def help_about(self):
+        """关于"""
         messagebox.showinfo(
-            "关于", "作者：kinfinger \n verion 1.0 \n 感谢您的使用！ \n kinfinge@gmail.com "
-        )  # 弹出消息提示框
+            "关于", "作者: doudoudzj \n verion 1.0 \n 感谢您的使用！ \n doudoudzj@sina.com"
+        )
 
 class initLoginMenu:
     """登陆界面菜单"""

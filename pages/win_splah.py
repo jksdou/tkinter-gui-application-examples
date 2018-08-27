@@ -17,6 +17,7 @@ class Splah(Tk):
 
     def __init__(self):
         Tk.__init__(self)
+        self.title("程序加载中")
         self.w = 300
         self.h = 300
         set_window_center(self, self.w, self.h)

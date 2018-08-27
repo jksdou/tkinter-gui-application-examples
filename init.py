@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8-*-
 
-import os
-# import tkinter.messagebox
+import tkinter.messagebox
 from tkinter import Button, Label, Tk
 
-# import lib.global_variable as glv
 from lib.functions import set_window_center
 from lib.sqlite_helper import DBHelper
 from main import App
@@ -19,9 +17,6 @@ class InitWindow(Tk):
         self.title("初始化数据")
         set_window_center(self, 300, 180)
         self.resizable(False, False)
-        # glv.init_global_variable()
-        # glv.set_variable("APP_PATH", os.path.dirname(__file__))
-        # glv.set_variable("DATA_DIR", "data")
         self.win_success = None # 初始化成功的提示窗口
         self.init_page()
 
@@ -49,8 +44,17 @@ class InitWindow(Tk):
             print("查询内容:", tmp3)
             self.do_success()
             self.destroy()
-        except expression as identifier:
-            print(identifier)
+        except KeyError:
+            print(KeyError)
+            self.do_failed()
+
+    def do_failed(self):
+        """是否重试"""
+        res = tkinter.messagebox.askretrycancel('提示', '初始化失败，是否重试？', parent=self)
+        if res is True:
+            self.do_init_db()
+        elif res is False:
+            self.destroy()
 
     def do_success(self):
         """初始化成功弹窗"""
@@ -72,8 +76,7 @@ class InitWindow(Tk):
         self.win_success.destroy()
         self.win_success.quit()
 
-        app_open = App()
-        app_open.mainloop()
+        App()
 
 
 if __name__ == "__main__":

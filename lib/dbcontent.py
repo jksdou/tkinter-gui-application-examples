@@ -43,7 +43,10 @@ def content_add(username, title, content, tag):
     _db = DBHelper()
     return _db.insert_content_by_username(username, title, content, tag) is True
 
-def content_list():
+def content_list_by_username(username):
     """用户的所有文章"""
+    if username is None:
+        return "账号不能为空"
+
     _db = DBHelper()
-    return _db.get_content_by_username('admin')
+    return _db.get_content_by_username(username)
