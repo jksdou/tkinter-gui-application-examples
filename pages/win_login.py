@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import tkinter as gui
-import tkinter.messagebox
+from tkinter import Button, Entry, Frame, Label, Menu, StringVar, messagebox
 
 import lib.dbcontent as dbcontent
-from lib.functions import set_window_center
-from components.menu import initLoginMenu
-from components.view import MainPage
 import lib.global_variable as glv
+from components.view import MainPage
+from lib.functions import set_window_center
 
 
-class Login(object):
+class Login():
+    """登录"""
     def __init__(self, master=None):
         if self.isLoggedIn() is True:
             MainPage(master)
@@ -20,32 +19,42 @@ class Login(object):
             self.root.title("账号登陆")
             set_window_center(self.root, 300, 180)
             # 定义变量
-            self.username = gui.StringVar()
-            self.password = gui.StringVar()
-            self.initPage()
+            self.username = StringVar()
+            self.password = StringVar()
+            self.init_menu()
+            self.init_page()
 
-    def initPage(self):
-        initLoginMenu(self.root)
-        self.page = gui.Frame(self.root)  # 创建Frame
+    def init_page(self):
+        """登录界面"""
+
+        self.page = Frame(self.root)  # 创建Frame
         self.page.pack()
 
-        gui.Label(self.page).grid(row=0, stick="W")
+        Label(self.page).grid(row=0, stick="W")
 
-        gui.Label(self.page, text="账户: ").grid(row=1, stick="W", pady=10)
-        username = gui.Entry(self.page, textvariable=self.username)
+        Label(self.page, text="账户: ").grid(row=1, stick="W", pady=10)
+        username = Entry(self.page, textvariable=self.username)
         username.grid(row=1, column=1, stick="E")
         username.bind("<Return>", self.returnEnvent)
 
-        gui.Label(self.page, text="密码: ").grid(row=2, stick="W", pady=10)
-        password = gui.Entry(self.page, textvariable=self.password, show="*")
+        Label(self.page, text="密码: ").grid(row=2, stick="W", pady=10)
+        password = Entry(self.page, textvariable=self.password, show="*")
         password.grid(row=2, column=1, stick="E")
         password.bind("<Return>", self.returnEnvent)
 
-        button_login = gui.Button(self.page, text="登陆", command=self.doLogin)
+        button_login = Button(self.page, text="登陆", command=self.doLogin)
         button_login.grid(row=3, column=1, stick="W", pady=10)
 
-        button_cancel = gui.Button(self.page, text="退出", command=self.doCancel)
+        button_cancel = Button(self.page, text="退出", command=self.doCancel)
         button_cancel.grid(row=3, column=1, stick="e")
+
+    def init_menu(self):
+        """创建菜单栏"""
+        menubar = Menu(self.root)
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="退出", command=self.root.quit)
+        menubar.add_cascade(label="文件", menu=filemenu)
+        self.root.config(menu=menubar)
 
     def doLogin(self):
         username = self.username.get()
@@ -58,7 +67,7 @@ class Login(object):
             glv.set_variable("CURRENT_USER_NAME", str(username))
             MainPage(self.root)
         else:
-            tkinter.messagebox.showinfo(title="错误", message="账号或密码错误！")
+            messagebox.showinfo(title="错误", message="账号或密码错误！")
 
     def doCancel(self):
         self.page.quit()
