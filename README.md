@@ -1,4 +1,4 @@
-# A Desktop App based on Tkinter
+# A Desktop Application Example based on Tkinter by Python3
 
 ## Features
 - menu
