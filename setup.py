@@ -13,7 +13,7 @@ APP_VERSION = "0.0.1"
 DATA_FILES = ["lib", "data", "components", "pages"]
 OPTIONS = {
     "argv_emulation": True,
-    # "iconfile": "app.icns",
+    "iconfile": "data/image/128.icns",
     "plist": {
         "CFBundleName": APP_NAME,
         "CFBundleDisplayName": APP_NAME,
