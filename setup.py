@@ -10,7 +10,7 @@ from setuptools import setup
 APP = ["main.py"]
 APP_NAME = "应用程序"
 APP_VERSION = "0.0.1"
-DATA_FILES = []
+DATA_FILES = ["lib", "data", "components", "pages"]
 OPTIONS = {
     "argv_emulation": True,
     # "iconfile": "app.icns",

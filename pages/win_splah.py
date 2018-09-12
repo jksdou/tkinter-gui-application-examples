@@ -6,7 +6,7 @@
 import os
 from tkinter import Canvas, Label, Tk
 
-from PIL import Image, ImageTk
+# from PIL import Image, ImageTk
 
 import lib.global_variable as glv
 from lib.functions import set_window_center
@@ -33,14 +33,14 @@ class Splah(Tk):
             "splash.jpg",
         )
         canvas = Canvas(self, width=self.w, height=250, bg="white")
-        if os.path.exists(image_file):
-            img = Image.open(image_file)  # 打开图片
-            image = ImageTk.PhotoImage(img)  # 用PIL模块的PhotoImage打开
-            canvas.create_image(self.w / 2, 250 / 2, image=image)
-        else:
-            canvas.create_text(
-                self.w / 2, 250 / 2, text="Crogram, Inc.", font="time 20", tags="string"
-            )
+        # if os.path.exists(image_file):
+        #     img = Image.open(image_file)  # 打开图片
+        #     image = ImageTk.PhotoImage(img)  # 用PIL模块的PhotoImage打开
+        #     canvas.create_image(self.w / 2, 250 / 2, image=image)
+        # else:
+        canvas.create_text(
+            self.w / 2, 250 / 2, text="Crogram, Inc.", font="time 20", tags="string"
+        )
 
         canvas.pack(fill="both")
         Label(self, text="欢迎使用", bg="green", fg="#fff", height=2).pack(
